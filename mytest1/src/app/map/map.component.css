@@ -1,0 +1,26 @@
+img{
+    position: absolute;
+    width: 85vw;
+}
+.image{
+    display:flex;
+    /* align-items:center; */
+    justify-content:center;
+}
+.button-a{
+    position: absolute;
+    left: 13%;
+    top: 25%;
+}
+
+.button-b{
+    position: absolute;
+    left: 62%;
+    top: 45%;
+}
+
+.button-c{
+    position: absolute;
+    left: 77%;
+    top: 19%;
+}
