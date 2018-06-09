@@ -27,7 +27,7 @@ var options = {
 };
 
 var client = mqtt.connect(options);
-client.subscribe('rfid');
+client.subscribe(config.LOCAL_MQTT_TOPIC);
 
 
 client.on('connect', function () {
@@ -41,16 +41,17 @@ client.on('connect', function () {
 
 client.on('message', function (topic, message) {
     // message is Buffer
-    client.publish(config.LOCAL_MQTT_TOPIC, message.toString() + ' OK!');
-    
+    // client.publish(config.LOCAL_MQTT_TOPIC, message.toString() + ' OK!');
+    // console.log(JSON.parse(message.toString()));
+
     try {
         var Fridge = mongoose.model('check', fridgeSchema);
         var fridge = new Fridge(JSON.parse(message.toString())[0]);
 
         if (fridge.check() == -1) {
-            
+
             // console.log(Fridge.modelName);
-            let Fridge = mongoose.model('data_'+new moment().format('YYYYMMDD')+'_'+fridge.reader_mac, fridgeSchema);
+            let Fridge = mongoose.model('data_' + new moment().format('YYYYMMDD') + '_' + fridge.reader_mac, fridgeSchema);
             let newfridge = new Fridge(JSON.parse(message.toString())[0]);
             newfridge.save(function (err) {
                 if (err) {
@@ -58,6 +59,22 @@ client.on('message', function (topic, message) {
                 } else {
                     console.log('\x1b[32m System: readerMac ->' + newfridge.reader_mac + ' inserted database ! \x1b[37m')
                 }
+            });
+
+            let FridgeList = mongoose.model('list_' + new moment().format('YYYYMMDD') + '_' + fridge.reader_mac, fridgeSchema);
+
+            FridgeList.find({ reader_mac: newfridge.reader_mac }, function (err, data) {
+                if (!data[0]) {
+                    let newfridgeList = new FridgeList(JSON.parse(message.toString())[0]);
+                    newfridgeList.save(function (err) {
+                        if (err) {
+                            throw '\x1b[31m Error: mongodb ' + err + '\x1b[37m';
+                        } else {
+                            console.log('\x1b[32m System: job_number ->' + newfridge.reader_mac + ' inserted database ! \x1b[37m')
+                        }
+                    });
+                }
+                // console.log(data);
             });
         } else {
             throw '\x1b[31m Error: Parsing Error ' + '\x1b[37m';
