@@ -13,13 +13,29 @@ export class AppService {
   oUtil = new Util();
   constructor(private http:Http) { }
 
-  getData(start: any, mac: any): Observable<Fridge[]> {
+  getJobNumbers(currentTime: any, reader_mac: any): Observable<Fridge[]> {
     let params: URLSearchParams = new URLSearchParams();
     // params.set('name', searchCriteria);
-    params.set('start',start);
-    params.set('mac',mac);
+    params.set('currentTime',currentTime);
+    params.set('reader_mac',reader_mac);
 
-    return this.http.get(this.oUtil.serverUrl + ':4000/getData', { search: params })
+    return this.http.get(this.oUtil.serverUrl + ':4000/getJobNumbers', { search: params })
+      .map((res: any) => {
+        return res.json();
+      })
+      .catch((error: any) => {
+        return Observable.throw(error.json ? error.json().error : error || 'Server error')
+      });
+  }
+
+  getFridges(currentTime: any,  reader_mac: any, job_number: any): Observable<Fridge[]> {
+    let params: URLSearchParams = new URLSearchParams();
+    // params.set('name', searchCriteria);
+    params.set('currentTime',currentTime);
+    params.set('reader_mac',reader_mac);
+    params.set('job_number',job_number);
+
+    return this.http.get(this.oUtil.serverUrl + ':4000/getFridges', { search: params })
       .map((res: any) => {
         return res.json();
       })

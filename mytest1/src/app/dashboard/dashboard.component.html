@@ -3,9 +3,13 @@
     <div class="col1">
       <h4>
         <div class="title" style="color:red;">
-            <span><strong>區段: {{title}}</strong></span>
-            <span class="seprator"></span>
-            <span><strong>{{date}}</strong></span>
+          <span>
+            <strong>區段: {{title}}</strong>
+          </span>
+          <span class="seprator"></span>
+          <span>
+            <strong>{{date}}</strong>
+          </span>
         </div>
       </h4>
 
@@ -43,7 +47,7 @@
             <th scope="col" style="vertical-align:middle;">加班</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody *ngFor="let key of tables; let i=index">
           <!-- <tr *ngFor="let flameout of flameouts">
         <td>{{flameout.carNum}}</td>
         <td>{{flameout.driver}}王曉明</td>
@@ -52,23 +56,22 @@
       </tr> -->
           <tr>
             <td>目標</td>
-            <td>28</td>
+            <td *ngFor="let t of tables[i].target;">{{t}}</td>
+            <!-- <td>28</td>
             <td>22</td>
             <td>30</td>
-            <td>20</td>
+            <td>20</td> -->
             <td></td>
           </tr>
           <tr>
             <td>實際產出</td>
-            <td>29</td>
-            <td>10</td>
-            <td></td>
-            <td></td>
+            <td  *ngFor="let a of tables[i].acOutput;">{{a}}</td>
             <td></td>
           </tr>
           <tr>
             <td>備註說明</td>
-            <td>生產正常</td>
+            <!-- <td>生產正常</td> -->
+            <td></td>
             <td></td>
             <td></td>
             <td></td>
