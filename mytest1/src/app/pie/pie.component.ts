@@ -186,7 +186,7 @@ export class PieComponent implements OnInit {
         data: 0.99,
         color: "rgb(0, 200, 50)",
         doughnutHoleSize: 0.8,
-        text:"移工效率"
+        text:"稼工效率"
       }
     );
 
