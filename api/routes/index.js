@@ -6,30 +6,83 @@ var moment = require('moment');
 
 var router = express.Router();
 
-router.get('/getData', function (req, res, next) {
+router.get('/getJobNumbers', function (req, res, next) {
   var searchQuery = {};
   var collection = '';
-  if (req.query.name)
-    searchQuery = { name: req.query.name };
-  if (req.query.start && req.query.mac) {
+  // if (req.query.reader_mac)
+  //   searchQuery = { name: req.query.name };
+  if (req.query.currentTime && req.query.reader_mac) {
 
-    collection = 'data_' + new moment(req.query.start).format('YYYYMMDD') + '_' + req.query.mac;
+    collection = 'list_' + new moment(req.query.startTime).format('YYYYMMDD') + '_' + req.query.reader_mac;
 
-    var Fridge = mongoose.model(collection, fridgeSchema);
-
-    Fridge.find(searchQuery, function (err, fridges) {
+    var FridgeList = mongoose.model(collection, fridgeSchema);
+    FridgeList.find(searchQuery, function (err, fridges) {
       if (err) {
         res.status(400);
         res.send();
       }
       console.log(fridges);
-      console.log("returning all the fridges.");
+      console.log("returning all the jobs.");
       res.send(fridges);
     })
-  } else {
+  }
+  else {
     res.send([]);
   }
+});
 
+function getSectionTime(collection, job_number, currentTime, startTime, endTime) {
+  return new Promise((resolve, reject) => {
+    try {
+      var searchQuery = { job_number: job_number, date: { $gte: startTime, $lte: endTime } };
+      var Fridge = mongoose.model(collection, fridgeSchema);
+      Fridge.find(searchQuery, function (err, fridges) {
+        if (!err) {
+          resolve(fridges);
+          console.log(fridges);
+        }
+        resolve('');
+      })
+
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
+
+router.get('/getFridges', async function (req, res, next) {
+
+  var collection = '';
+  var objs = [];
+  // if (req.query.reader_mac)
+  //   searchQuery = { name: req.query.name };
+
+  if (req.query.currentTime && req.query.reader_mac && req.query.job_number) {
+
+    let currentTime = req.query.currentTime;
+    let sectionTime = [
+      new moment(currentTime + ' 07:50:00').format('YYYY-MM-DD HH:mm:ss'),
+      new moment(currentTime + ' 10:00:00').format('YYYY-MM-DD HH:mm:ss'),
+      new moment(currentTime + ' 10:10:00').format('YYYY-MM-DD HH:mm:ss'),
+      new moment(currentTime + ' 11:50:00').format('YYYY-MM-DD HH:mm:ss'),
+      new moment(currentTime + ' 12:40:00').format('YYYY-MM-DD HH:mm:ss'),
+      new moment(currentTime + ' 15:00:00').format('YYYY-MM-DD HH:mm:ss'),
+      new moment(currentTime + ' 15:10:00').format('YYYY-MM-DD HH:mm:ss'),
+      new moment(currentTime + ' 16:40:00').format('YYYY-MM-DD HH:mm:ss')];
+
+    collection = 'data_' + new moment(currentTime).format('YYYYMMDD') + '_' + req.query.reader_mac;
+    // console.log(collection + '->' + searchQuery);
+    for (let i = 0; i < sectionTime.length; i += 2) {
+      var json = await getSectionTime(collection, req.query.job_number, currentTime, sectionTime[i], sectionTime[i + 1]);
+      if(json) objs.push(json[json.length-1]);
+      // console.log(json[0]);
+    }
+    console.log(objs);
+    res.send(objs);
+  }
+  else {
+    res.send([]);
+  }
 });
 
 // router.post('/insertCar', function(req, res, next) {
