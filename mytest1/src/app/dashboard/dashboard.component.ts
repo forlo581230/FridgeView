@@ -18,7 +18,7 @@ export class DashboardComponent implements OnInit {
   reader_mac: string[] = ['rfid_1', 'rfid_2', 'rfid_3', 'rfid_4'];
 
   title: string;
-  date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
+  date:string;
   @ViewChild(PieComponent) pie: PieComponent;
 
   currentFridges: Fridge[] = [];
@@ -37,9 +37,14 @@ export class DashboardComponent implements OnInit {
     this.title = this.rfid[id];
     this.totalAmount = 0;
     this.totalTarge = 0;
+    this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
     this.getJobNumbers(this.reader_mac[id]);
+    
     var loop = setInterval(() => {
       this.getJobNumbers(this.reader_mac[id]);
+      this.totalAmount = 0;
+      this.totalTarge = 0;
+      this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
     }, 1000 * 30);
     // console.log(moment().hour(7).minute(50).second(0))
   }
@@ -67,10 +72,12 @@ export class DashboardComponent implements OnInit {
             let acOuput = 0;
             let target = parseInt(this.currentFridges[i].target.toString());
             let maximumAmount = 0;
+            //this.output.length==4
             for (let j = 0; j < this.output.length; j++) {
               if (this.output[j]) {//只使用到 amount
                 let amount = parseInt(this.output[j].amount.toString());
                 acOuput = amount - acOuput;
+                console.log(acOuput);
                 table.acOutput.push(acOuput);
                 if (amount > maximumAmount) maximumAmount = amount;
               }
@@ -94,6 +101,7 @@ export class DashboardComponent implements OnInit {
             this.currentFridges.push(Fridge.CreateDefault());
           console.log(this.tables);
         }
+        //更新圖表
         this.pie.drawPie(this.totalAmount / this.totalTarge, 0, 0, 0);
       }
     )
