@@ -40,6 +40,7 @@ export class DashboardComponent implements OnInit {
     this.getJobNumbers(this.reader_mac[id]);
     var loop = setInterval(() => {
       this.getJobNumbers(this.reader_mac[id]);
+      this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
     }, 1000 * 30);
     // console.log(moment().hour(7).minute(50).second(0))
   }
