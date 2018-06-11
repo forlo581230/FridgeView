@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit {
   output: Fridge[] = [];
   tables: Table[];
   totalAmount: number;
-  totalTarge:number;
+  totalTarge: number;
   constructor(
     private appService: AppService,
     private route: ActivatedRoute
@@ -36,8 +36,11 @@ export class DashboardComponent implements OnInit {
     const id = +this.route.snapshot.paramMap.get('id');
     this.title = this.rfid[id];
     this.totalAmount = 0;
-    this.totalTarge=0;
+    this.totalTarge = 0;
     this.getJobNumbers(this.reader_mac[id]);
+    var loop = setInterval(() => {
+      this.getJobNumbers(this.reader_mac[id]);
+    }, 1000 * 30);
     // console.log(moment().hour(7).minute(50).second(0))
   }
 

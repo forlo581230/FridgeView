@@ -15,12 +15,12 @@ table{
 
 td, th{
     vertical-align:middle;
-    font-size: 30px;
+    /* font-size: 30px; */
 }
 
 table,tr,th, td{
     border: 2px solid black;
-    font-size: xx-large;
+    font-size: 34px;
 }
 
 tbody{
