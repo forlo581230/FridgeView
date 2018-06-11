@@ -48,7 +48,7 @@ client.on('message', function (topic, message) {
         var Fridge = mongoose.model('check', fridgeSchema);
         var fridge = new Fridge(JSON.parse(message.toString())[0]);
 
-        if (fridge.check() == -1 && new moment(fridge.date).isAfter(new moment().hours(7).minutes(49).seconds(59))) {
+        if (fridge.check() == -1 && new moment(fridge.date).isAfter(new moment().hours(6).minutes(0).seconds(0))) {
 
             // console.log(Fridge.modelName);
             let Fridge = mongoose.model('data_' + new moment().format('YYYYMMDD') + '_' + fridge.reader_mac, fridgeSchema);
