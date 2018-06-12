@@ -63,14 +63,14 @@ client.on('message', function (topic, message) {
 
             let FridgeList = mongoose.model('list_' + new moment().format('YYYYMMDD') + '_' + fridge.reader_mac, fridgeSchema);
 
-            FridgeList.find({ reader_mac: newfridge.reader_mac }, function (err, data) {
+            FridgeList.find({ job_number: newfridge.job_number }, function (err, data) {
                 if (!data[0]) {
                     let newfridgeList = new FridgeList(JSON.parse(message.toString())[0]);
                     newfridgeList.save(function (err) {
                         if (err) {
                             throw '\x1b[31m Error: mongodb ' + err + '\x1b[37m';
                         } else {
-                            console.log('\x1b[32m System: job_number ->' + newfridge.reader_mac + ' inserted database ! \x1b[37m')
+                            console.log('\x1b[32m System: job_number: ' + newfridge.job_number + '->' + newfridge.reader_mac + ' inserted database ! \x1b[37m')
                         }
                     });
                 }
