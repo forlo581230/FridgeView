@@ -104,7 +104,8 @@ export class DashboardComponent implements OnInit {
                     acOuput = amount - acOuput;
                     console.log(acOuput);
                     table.acOutput.push(acOuput);
-                    if (amount > maximumAmount) maximumAmount = amount;
+                    // if (amount > maximumAmount) maximumAmount = amount;
+                    maximumAmount+=acOuput;
                   }
                   else {
                     table.acOutput.push(0);
