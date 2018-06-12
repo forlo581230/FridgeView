@@ -44,6 +44,7 @@
             <th scope="col">10:10~11:50</th>
             <th scope="col">12:40~15:00</th>
             <th scope="col">15:10~16:40</th>
+            <!-- <th scope="col">總數</th> -->
             <th scope="col" style="vertical-align:middle;">加班</th>
           </tr>
         </thead>
@@ -54,26 +55,21 @@
         <td>{{flameout.startTime}}</td>
         <td>{{flameout.endTime}}</td>
       </tr> -->
-          <tr>
+          <!-- <tr>
             <td>目標</td>
             <td *ngFor="let t of tables[i].target;">{{t}}</td>
-            <!-- <td>28</td>
-            <td>22</td>
-            <td>30</td>
-            <td>20</td> -->
             <td></td>
-          </tr>
+          </tr> -->
           <tr>
-            <td>實際產出</td>
+            <td>{{currentFridges[i].job_number}}</td>
             <td  *ngFor="let a of tables[i].acOutput;">{{a}}</td>
             <td></td>
           </tr>
-          <tr>
+          <!-- <tr>
             <td>備註說明</td>
             <td  *ngFor="let a of tables[i].note;">{{a}}</td>
-            <!-- <td>生產正常</td> -->
             <td></td>
-          </tr>
+          </tr> -->
         </tbody>
       </table>
     </div>

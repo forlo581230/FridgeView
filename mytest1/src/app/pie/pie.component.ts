@@ -1,4 +1,4 @@
-import { Component, OnInit ,ViewChild,ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import * as $ from 'jquery';
 
 const subCanvas = {
@@ -17,13 +17,14 @@ const mainCanvas = {
   styleUrls: ['./pie.component.scss']
 })
 export class PieComponent implements OnInit {
-  name:string = 'childName';
+  name: string = 'childName';
 
   @ViewChild('canvass') canvasRef: ElementRef;
   @ViewChild('a') aRef: ElementRef;
   @ViewChild('b') bRef: ElementRef;
   @ViewChild('c') cRef: ElementRef;
-  
+  @ViewChild('amount') amountRef: ElementRef;
+
 
 
   constructor() { }
@@ -100,12 +101,12 @@ export class PieComponent implements OnInit {
 
       ctx.fillStyle = "white";
       ctx.font = "2vw Microsoft JhengHei";
-      ctx.fillText((data*100).toFixed(0)+'%', canvas.width / 2 - ctx.measureText("99%").width/2, canvas.height / 2-15);
+      ctx.fillText((data * 100).toFixed(0) + '%', canvas.width / 2 - ctx.measureText("99%").width / 2, canvas.height / 2 - 15);
 
       ctx.fillStyle = "black";
       ctx.font = "1.5vw Microsoft JhengHei";
-      ctx.fillText("計畫達成率", canvas.width / 2 - ctx.measureText("計畫達成率").width/2, canvas.height / 2 +20);
-      document.getElementById("ca").innerText="text";
+      ctx.fillText("計畫達成率", canvas.width / 2 - ctx.measureText("計畫達成率").width / 2, canvas.height / 2 + 20);
+      document.getElementById("ca").innerText = "text";
       if (data >= options.data) clearInterval(loop);
       data += 0.01;
     }, 30);
@@ -157,18 +158,23 @@ export class PieComponent implements OnInit {
       );
       ctx.fillStyle = "black";
       ctx.font = "2vw Microsoft JhengHei";
-      ctx.fillText((data*100).toFixed(0)+'%', canvas.width / 2 - ctx.measureText("99%").width/2, canvas.height / 2-15);
+      ctx.fillText((data * 100).toFixed(0) + '%', canvas.width / 2 - ctx.measureText("99%").width / 2, canvas.height / 2 - 15);
 
       ctx.fillStyle = color;
       // ctx.font = "solid 2vw Microsoft JhengHei";
-      ctx.fillText(options.text, canvas.width / 2 - ctx.measureText(options.text).width/2, canvas.height / 2 +25);
+      ctx.fillText(options.text, canvas.width / 2 - ctx.measureText(options.text).width / 2, canvas.height / 2 + 25);
       if (data >= options.data) clearInterval(loop);
       data += 0.01;
     }, 30);
   }
+  drawNumber(ctx, canvas,text) {
+    ctx.fillStyle = "red";
+    ctx.font = "3.2vw Microsoft JhengHei";
+    ctx.fillText(text, canvas.width / 2 - ctx.measureText("100").width / 2, canvas.height / 2 +10 );
+  }
 
 
-  drawPie(d1: number, d2: number, d3: number, d4: number) {
+  drawPie(d1: number, d2: number, d3: number, d4: number, text:string) {
     this.mainPiechart(this.canvasRef.nativeElement.getContext('2d'),
       {
 
@@ -186,7 +192,7 @@ export class PieComponent implements OnInit {
         data: 0.99,
         color: "rgb(0, 200, 50)",
         doughnutHoleSize: 0.8,
-        text:"稼工效率"
+        text: "稼工效率"
       }
     );
 
@@ -196,8 +202,10 @@ export class PieComponent implements OnInit {
         data: 0.99,
         color: "rgb(250, 100, 0)",
         doughnutHoleSize: 0.8,
-        text:"品質良率"
+        text: "品質良率"
       });
+
+    this.drawNumber(this.amountRef.nativeElement.getContext('2d'), mainCanvas,text);
 
     // this.subPiechart(this.cRef.nativeElement.getContext('2d'),
     //   {
@@ -206,6 +214,8 @@ export class PieComponent implements OnInit {
     //     color: "rgba(0, 0, 255)",
     //     doughnutHoleSize: 0.8
     //   });
+
+
   }
 
 

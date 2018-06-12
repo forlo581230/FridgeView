@@ -9,4 +9,7 @@ export class Table {
     static CreateDefault(): Table {
         return new Table([],[],[]);
     }
+    static CreateEmpty(): Table {
+        return new Table([],[0,0,0,0],[]);
+    }
 }

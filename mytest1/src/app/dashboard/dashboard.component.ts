@@ -19,7 +19,11 @@ export class DashboardComponent implements OnInit {
 
   title: string;
   date: string;
+  obj: object;
   @ViewChild(PieComponent) pie: PieComponent;
+
+  //test
+  table: Table;
 
   currentFridges: Fridge[] = [];
   output: Fridge[] = [];
@@ -53,71 +57,6 @@ export class DashboardComponent implements OnInit {
   //   this.pie.drawPie(39 / 100, 0, 0, 0);
   // }
 
-  getJobNumbers(reader_mac: string) {
-
-    this.tables = [];
-
-    this.appService.getJobNumbers(moment().format('YYYY-MM-DD'), reader_mac).subscribe(
-      async elements => {
-        console.log(elements);
-        this.currentFridges = elements;
-
-        if (this.currentFridges.length <= 3) {
-          //compute output
-          for (let i = 0; i < this.currentFridges.length; i++) {
-            await this.getSection(this.currentFridges[i]);
-            console.log(this.output);
-
-            let table: Table = Table.CreateDefault();
-            let acOuput = 0;
-            let target = parseInt(this.currentFridges[i].target.toString());
-            let maximumAmount = 0;
-            //this.output.length==4
-            for (let j = 0; j < this.output.length; j++) {
-              if (this.output[j]) {//只使用到 amount
-                let amount = parseInt(this.output[j].amount.toString());
-                acOuput = amount - acOuput;
-                console.log(acOuput);
-                table.acOutput.push(acOuput);
-                if (amount > maximumAmount) maximumAmount = amount;
-              }
-              else {
-                table.acOutput.push(0);
-              }
-
-              table.note.push('');
-            }
-            table.target.push((target * 130 / 460).toFixed());
-            table.target.push((target * 100 / 460).toFixed());
-            table.target.push((target * 140 / 460).toFixed());
-            table.target.push((target - parseInt(table.target[0]) - parseInt(table.target[1]) - parseInt(table.target[2])).toFixed());
-
-            acOuput = 0;
-            target = 0;
-            for (let index = 0; index < table.target.length; index++) {
-              acOuput += table.acOutput[index]
-              target += parseInt(table.target[index])
-              if (acOuput > target) {
-                table.note[index] = '正常'
-              }
-            }
-
-            console.log(table);
-            this.tables.push(table);
-
-            this.totalAmount += maximumAmount;
-            this.totalTarge += parseInt(this.currentFridges[i].target.toString());
-          }
-          for (let i = 0; i <= 3 - this.currentFridges.length; i++)
-            this.currentFridges.push(Fridge.CreateDefault());
-          console.log(this.tables);
-        }
-        //更新圖表
-        this.pie.drawPie(this.totalAmount / this.totalTarge, 0, 0, 0);
-      }
-    )
-  }
-
   getSection(tmpFridge: Fridge) {
     let currentTime = moment().format('YYYY-MM-DD');
 
@@ -127,7 +66,7 @@ export class DashboardComponent implements OnInit {
         // let obj :Fridge[]= [];
         this.appService.getFridges(currentTime, tmpFridge.reader_mac, tmpFridge.job_number).subscribe(
           fridges => {
-            this.output = fridges;
+            this.output=(fridges);
             resolve(fridges);
           })
 
@@ -139,6 +78,75 @@ export class DashboardComponent implements OnInit {
   }
 
 
+  getJobNumbers(reader_mac: string) {
 
+        this.tables = [];
+
+        this.appService.getJobNumbers(moment().format('YYYY-MM-DD'), reader_mac).subscribe(
+          async elements => {
+            console.log(elements);
+            this.currentFridges = elements;
+
+            if (this.currentFridges.length <= 3) {
+              //compute output
+              for (let i = 0; i < this.currentFridges.length; i++) {
+                await this.getSection(this.currentFridges[i]);
+                console.log(this.output);
+
+                let table: Table = Table.CreateDefault();
+                let acOuput = 0;
+                let target = parseInt(this.currentFridges[i].target.toString());
+                let maximumAmount = 0;
+                //this.output.length==4
+                for (let j = 0; j < this.output.length; j++) {
+                  if (this.output[j]) {//只使用到 amount
+                    let amount = parseInt(this.output[j].amount.toString());
+                    acOuput = amount - acOuput;
+                    console.log(acOuput);
+                    table.acOutput.push(acOuput);
+                    if (amount > maximumAmount) maximumAmount = amount;
+                  }
+                  else {
+                    table.acOutput.push(0);
+                  }
+
+                  table.note.push('');
+                }
+                table.target.push((target * 130 / 460).toFixed());
+                table.target.push((target * 100 / 460).toFixed());
+                table.target.push((target * 140 / 460).toFixed());
+                table.target.push((target - parseInt(table.target[0]) - parseInt(table.target[1]) - parseInt(table.target[2])).toFixed());
+
+                // acOuput = 0;
+                // target = 0;
+                // for (let index = 0; index < table.target.length; index++) {
+                //   acOuput += table.acOutput[index]
+                //   target += parseInt(table.target[index])
+                //   if (acOuput > target) {
+                //     table.note[index] = '正常'
+                //   }
+                // }
+
+                
+                
+                // table.acOutput.push(maximumAmount);
+                console.log(table);
+                this.tables.push(table);
+                this.totalAmount += maximumAmount;
+                this.totalTarge += parseInt(this.currentFridges[i].target.toString());
+              }
+
+              for (let i = 0; i <= 3 - this.currentFridges.length; i++){
+                this.currentFridges.push(Fridge.CreateDefault());
+                this.tables.push(Table.CreateEmpty());
+              }
+                
+              console.log(this.tables);
+            }
+            //更新圖表
+            this.pie.drawPie(this.totalAmount / this.totalTarge, 0, 0, 0,this.totalAmount.toString());
+          }
+        )
+      }
 
 }
