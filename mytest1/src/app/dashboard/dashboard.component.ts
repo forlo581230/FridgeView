@@ -18,7 +18,7 @@ export class DashboardComponent implements OnInit {
   reader_mac: string[] = ['rfid_1', 'rfid_2', 'rfid_3', 'rfid_4'];
 
   title: string;
-  date:string;
+  date: string;
   @ViewChild(PieComponent) pie: PieComponent;
 
   currentFridges: Fridge[] = [];
@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit {
     this.totalTarge = 0;
     this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
     this.getJobNumbers(this.reader_mac[id]);
-    
+
     var loop = setInterval(() => {
       this.getJobNumbers(this.reader_mac[id]);
       this.totalAmount = 0;
@@ -91,6 +91,17 @@ export class DashboardComponent implements OnInit {
             table.target.push((target * 100 / 460).toFixed());
             table.target.push((target * 140 / 460).toFixed());
             table.target.push((target - parseInt(table.target[0]) - parseInt(table.target[1]) - parseInt(table.target[2])).toFixed());
+
+            acOuput = 0;
+            target = 0;
+            for (let index = 0; index < table.target.length; index++) {
+              acOuput += table.acOutput[index]
+              target += parseInt(table.target[index])
+              if (acOuput > target) {
+                table.note[index] = '正常'
+              }
+            }
+
             console.log(table);
             this.tables.push(table);
 
