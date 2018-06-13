@@ -49,27 +49,11 @@
           </tr>
         </thead>
         <tbody *ngFor="let key of tables; let i=index">
-          <!-- <tr *ngFor="let flameout of flameouts">
-        <td>{{flameout.carNum}}</td>
-        <td>{{flameout.driver}}王曉明</td>
-        <td>{{flameout.startTime}}</td>
-        <td>{{flameout.endTime}}</td>
-      </tr> -->
-          <!-- <tr>
-            <td>目標</td>
-            <td *ngFor="let t of tables[i].target;">{{t}}</td>
-            <td></td>
-          </tr> -->
           <tr>
             <td>{{currentFridges[i].job_number}}</td>
             <td  *ngFor="let a of tables[i].acOutput;">{{a}}</td>
             <td></td>
           </tr>
-          <!-- <tr>
-            <td>備註說明</td>
-            <td  *ngFor="let a of tables[i].note;">{{a}}</td>
-            <td></td>
-          </tr> -->
         </tbody>
       </table>
     </div>

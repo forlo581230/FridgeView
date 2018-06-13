@@ -85,11 +85,12 @@ export class DashboardComponent implements OnInit {
         this.appService.getJobNumbers(moment().format('YYYY-MM-DD'), reader_mac).subscribe(
           async elements => {
             console.log(elements);
+            let numJob=elements.length;
             this.currentFridges = elements;
 
-            if (this.currentFridges.length <= 3) {
+            if (numJob <= 3) {
               //compute output
-              for (let i = 0; i < this.currentFridges.length; i++) {
+              for (let i = 0; i < numJob; i++) {
                 await this.getSection(this.currentFridges[i]);
                 console.log(this.output);
 
@@ -102,7 +103,6 @@ export class DashboardComponent implements OnInit {
                   if (this.output[j]) {//只使用到 amount
                     let amount = parseInt(this.output[j].amount.toString());
                     acOuput = amount - acOuput;
-                    console.log(acOuput);
                     table.acOutput.push(acOuput);
                     // if (amount > maximumAmount) maximumAmount = amount;
                     maximumAmount+=acOuput;
@@ -127,9 +127,6 @@ export class DashboardComponent implements OnInit {
                 //     table.note[index] = '正常'
                 //   }
                 // }
-
-                
-                
                 // table.acOutput.push(maximumAmount);
                 console.log(table);
                 this.tables.push(table);
@@ -137,7 +134,7 @@ export class DashboardComponent implements OnInit {
                 this.totalTarge += parseInt(this.currentFridges[i].target.toString());
               }
 
-              for (let i = 0; i <= 3 - this.currentFridges.length; i++){
+              for (let i = 0; i < 3 - numJob; i++){
                 this.currentFridges.push(Fridge.CreateDefault());
                 this.tables.push(Table.CreateEmpty());
               }
@@ -145,7 +142,7 @@ export class DashboardComponent implements OnInit {
               console.log(this.tables);
             }
             //更新圖表
-            this.pie.drawPie(this.totalAmount / this.totalTarge, 0, 0, 0,this.totalAmount.toString());
+            this.pie.drawPie(this.totalAmount / this.totalTarge, 0, 0, 0, this.totalAmount.toString());
           }
         )
       }

@@ -168,6 +168,10 @@ export class PieComponent implements OnInit {
     }, 30);
   }
   drawNumber(ctx, canvas,text) {
+    ctx.fillStyle="white";  
+    ctx.beginPath();  
+    ctx.fillRect(0,0,canvas.width,canvas.height);  
+    ctx.closePath();  
     ctx.fillStyle = "red";
     ctx.font = "3.2vw Microsoft JhengHei";
     ctx.fillText(text, canvas.width / 2 - ctx.measureText("100").width / 2, canvas.height / 2 +10 );
