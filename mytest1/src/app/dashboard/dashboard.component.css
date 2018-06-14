@@ -1,9 +1,18 @@
+.container-fluid{
+    height: 100%;
+}
+.row1{
+    margin: 0px;
+    padding: 0px;
+    position: relative;
+    height: 100%;
+}
+
 .title{
     padding-top: 10px;
     display: flex;
     padding-bottom: 10px;
 }
-
 .seprator {
     flex: 1 1 auto;
 }
@@ -12,38 +21,35 @@
 table{
     text-align: center;
 }
-
 td, th{
     vertical-align:middle;
-    /* font-size: 30px; */
 }
-
 table,tr,th, td{
     border: 2px solid black;
     font-size: 34px;
 }
-
 tbody{
     color: red;
     font-weight: bold;
 }
 
-.col1{
 
+.col1{
+    height: 73%;
 }
 .col2{
     border: 2px solid black;
     /* height: 25vh; */
     margin: 0px;
     padding: 10px;
+    /* position: relative; height:40vh; */
+    height: 25%;
 }
-.row1{
-    margin: 0px;
-    padding: 0px;
-}
+
 app-pie{
     display:flex;
     align-items:center;
     justify-content:center;
     padding-top: 2vh;
 }
+

@@ -1,5 +1,5 @@
 <div class="container-fluid">
-  <div class="row1">
+  <!-- <div class="row1"> -->
     <div class="col1">
       <h4>
         <div class="title" style="color:red;">
@@ -51,7 +51,7 @@
         <tbody *ngFor="let key of tables; let i=index">
           <tr>
             <td>{{currentFridges[i].job_number}}</td>
-            <td  *ngFor="let a of tables[i].acOutput;">{{a}}</td>
+            <td *ngFor="let a of tables[i].acOutput;">{{a}}</td>
             <td></td>
           </tr>
         </tbody>
@@ -59,7 +59,9 @@
     </div>
 
     <div class="col2">
-      <app-pie></app-pie>
+      <!-- <app-pie></app-pie> -->
+      <app-bar></app-bar>
+        
     </div>
-  </div>
+  <!-- </div> -->
 </div>
