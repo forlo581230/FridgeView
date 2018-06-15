@@ -16,9 +16,9 @@ export class BarComponent implements OnInit {
   @ViewChild("bar") bar;
   context: CanvasRenderingContext2D;
 
-  amount:number;
+  amount: number;
   init(completionRate, jobNumber, totalAmount) {
-    this.amount=totalAmount;
+    this.amount = totalAmount;
     console.log('bar : ' + jobNumber);
     console.log('bar : ' + completionRate);
     let canvas = this.bar.nativeElement;
@@ -27,7 +27,7 @@ export class BarComponent implements OnInit {
     Chart.defaults.global.defaultFontSize = 30;
     Chart.defaults.global.defaultFontFamily = "Microsoft JhengHei";
     // Chart.defaults.global.defaultFontStyle = "normal";
-    Chart.defaults.global.animation.duration=0;
+    Chart.defaults.global.animation.duration = 0;
 
     // Chart.defaults.global.tooltips.enabled=false;
     Chart.defaults.global.elements.rectangle.borderWidth = 2;
@@ -44,19 +44,31 @@ export class BarComponent implements OnInit {
             label: '計畫達成率 (%)',
             backgroundColor: ["#3e95cd", "#8e5ea2", "#3cba9f"],
             data: completionRate,
-            
+
           }
         ]
       },
       options: {
         legend: {
-          display: false, 
+          display: false,
         },
         title: {
           display: true,
           text: '計畫達成率 (%)',
         },
-        
+        scales: {
+          xAxes: [{
+            ticks: {
+              beginAtZero: true,
+              max: 100,
+              min: 0,
+              callback: function (value, index, values) {
+                return value + '%';
+              }
+            }
+          }]
+        },
+
         maintainAspectRatio: false
       }
     });

@@ -31,6 +31,7 @@ export class DashboardComponent implements OnInit {
   currentFridges: Fridge[] = [];
   output: Fridge[] = [];
   tables: Table[];
+  showtables: Table[];
   totalAmount: number;
   totalTarge: number;
   constructor(
@@ -38,7 +39,6 @@ export class DashboardComponent implements OnInit {
     private route: ActivatedRoute
   ) {
   }
-
 
   ngOnInit() {
     const id = +this.route.snapshot.paramMap.get('id');
@@ -67,7 +67,6 @@ export class DashboardComponent implements OnInit {
 
   getSection(tmpFridge: Fridge) {
     let currentTime = moment().format('YYYY-MM-DD');
-
     let currenTarge = 0;
     return new Promise((resolve, reject) => {
       try {
@@ -85,16 +84,16 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  completionRate: string[];
+  completionRate: number[];
   jobNumber: string[];
   getJobNumbers(reader_mac: string) {
 
-    this.tables = [];
-    this.completionRate = [];
-    this.jobNumber = [];
-
     this.appService.getJobNumbers(moment().format('YYYY-MM-DD'), reader_mac).subscribe(
       async elements => {
+        this.tables = [];
+        this.completionRate = [];
+        this.jobNumber = [];
+
         console.log(elements);
         let numJob = elements.length;
         this.currentFridges = elements;
@@ -145,7 +144,7 @@ export class DashboardComponent implements OnInit {
 
             this.totalTarge += parseInt(this.currentFridges[i].target.toString());
 
-            this.completionRate.push((maximumAmount/parseInt(this.currentFridges[i].target.toString())*100).toFixed());
+            this.completionRate.push(parseInt((maximumAmount / parseInt(this.currentFridges[i].target.toString()) * 100).toFixed()));
             this.jobNumber.push(this.currentFridges[i].job_number.toString());
             // this.jobNumber.push('工號 ('+(i+1).toString()+')');
           }
@@ -154,8 +153,12 @@ export class DashboardComponent implements OnInit {
             this.currentFridges.push(Fridge.CreateDefault());
             this.tables.push(Table.CreateEmpty());
           }
-
+          if (this.completionRate.length == 0) {
+            this.completionRate = [100, 100, 100];
+            this.jobNumber = ['?', '?', '?'];
+          }
           console.log(this.tables);
+          this.showtables = this.tables;
         }
         //更新圖表
         // this.pie.drawPie(this.totalAmount / this.totalTarge, 0, 0, 0, this.totalAmount.toString());
@@ -163,7 +166,6 @@ export class DashboardComponent implements OnInit {
       }
     )
   }
-  /////
 
 
 
