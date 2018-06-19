@@ -76,6 +76,15 @@ client.on('message', function (topic, message) {
                 }
                 // console.log(data);
             });
+
+            FridgeList.find({}, function (err, data) {
+                //remove
+                if (data.length > 3) {
+                    FridgeList.remove({ _id: data[0]._id }, function (err) {
+                        if (!err) console.log('Remove: ' + data[0].job_number);
+                    })
+                }
+            })
         } else {
             throw '\x1b[31m Error: Parsing Error ' + '\x1b[37m';
         }
