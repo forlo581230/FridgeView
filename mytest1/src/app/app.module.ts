@@ -11,13 +11,15 @@ import { PieComponent } from './pie/pie.component';
 import { AppService} from './services/app.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { MapComponent } from './map/map.component';
+import { BarComponent } from './bar/bar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     PieComponent,
     DashboardComponent,
-    MapComponent
+    MapComponent,
+    BarComponent
   ],
   imports: [
     BrowserModule,
