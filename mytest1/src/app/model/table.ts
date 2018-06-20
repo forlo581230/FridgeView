@@ -10,6 +10,6 @@ export class Table {
         return new Table([],[],[]);
     }
     static CreateEmpty(): Table {
-        return new Table([],[0,0,0,0],[]);
+        return new Table([],[0,0,0,0,0],[]);
     }
 }

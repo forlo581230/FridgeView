@@ -19,17 +19,17 @@ import { Table } from '../model/table';
 export class DashboardComponent implements OnInit {
   rfid: string[] = ['箱體發泡', '商檢異常出口', '裝配線入口', '裝配線出口'];
   reader_mac: string[] = ['rfid_1', 'rfid_2', 'rfid_3', 'rfid_4'];
-
   title: string;
   date: string;
-  obj: object;
+  counter_time: number;
+  counter_index: number;
+  // obj: object;
+
   // @ViewChild(PieComponent) pie: PieComponent;
   @ViewChild(BarComponent) bar: BarComponent;
-  //test
-  table: Table;
 
-  currentFridges: Fridge[] = [];
-  output: Fridge[] = [];
+  currentFridges: Fridge[] = [];  //current jobNumbers
+  output: Fridge[] = [];          //current outputs
   tables: Table[];
   showtables: Table[];
   totalAmount: number;
@@ -43,51 +43,46 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     const id = +this.route.snapshot.paramMap.get('id');
     this.title = this.rfid[id];
+    this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
+    this.counter_time = 0;
+    this.counter_index = 0;
     this.totalAmount = 0;
     this.totalTarge = 0;
-    this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
+
     this.getJobNumbers(this.reader_mac[id]);
 
     var loop = setInterval(() => {
-      this.getJobNumbers(this.reader_mac[id]);
-      this.totalAmount = 0;
-      this.totalTarge = 0;
-      this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
-    }, 1000 * 30);
-    // console.log(moment().hour(7).minute(50).second(0))
+      switch (this.counter_time) {
+        case 60:
+          this.getJobNumbers(this.reader_mac[id]);
+          this.totalAmount = 0;
+          this.totalTarge = 0;
+          this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
+          this.counter_time = 0;
+          break;
+        case 10:
+          if(this.currentFridges.length>3){
+            this.counter_index += 3;
+            this.currentFridges.splice(0,3);
+          }
+          break;
+        default:
+          break;
+      }
 
+      this.counter_time++;
+    }, 1000 * 1);
     // Bar chart
-
-
   }
-
   // ngAfterViewInit() {
   //   this.pie.drawPie(39 / 100, 0, 0, 0);
   // }
-
-  getSection(tmpFridge: Fridge) {
-    let currentTime = moment().format('YYYY-MM-DD');
-    let currenTarge = 0;
-    return new Promise((resolve, reject) => {
-      try {
-        // let obj :Fridge[]= [];
-        this.appService.getFridges(currentTime, tmpFridge.reader_mac, tmpFridge.job_number).subscribe(
-          fridges => {
-            this.output = (fridges);
-            resolve(fridges);
-          })
-
-      }
-      catch (error) {
-        reject(error);
-      }
-    });
-  }
 
   completionRate: number[];
   jobNumber: string[];
   getJobNumbers(reader_mac: string) {
 
+    //get all jobNumber
     this.appService.getJobNumbers(moment().format('YYYY-MM-DD'), reader_mac).subscribe(
       async elements => {
         this.tables = [];
@@ -98,7 +93,7 @@ export class DashboardComponent implements OnInit {
         let numJob = elements.length;
         this.currentFridges = elements;
 
-        if (numJob <= 3) {
+        // if (numJob <= 3) {
           //compute output
           for (let i = 0; i < numJob; i++) {
             await this.getSection(this.currentFridges[i]);
@@ -110,7 +105,8 @@ export class DashboardComponent implements OnInit {
             let maximumAmount = 0;
             //this.output.length==4
             for (let j = 0; j < this.output.length; j++) {
-              if (this.output[j]) {//只使用到 amount
+              if (this.output[j]) {
+                //只使用到 amount
                 let amount = parseInt(this.output[j].amount.toString());
                 acOuput = amount - acOuput;
                 table.acOutput.push(acOuput);
@@ -149,7 +145,7 @@ export class DashboardComponent implements OnInit {
             // this.jobNumber.push('工號 ('+(i+1).toString()+')');
           }
 
-          for (let i = 0; i < 3 - numJob; i++) {
+          for (let i = 2; i < numJob%4%3; i++) {
             this.currentFridges.push(Fridge.CreateDefault());
             this.tables.push(Table.CreateEmpty());
           }
@@ -159,12 +155,32 @@ export class DashboardComponent implements OnInit {
           }
           console.log(this.tables);
           this.showtables = this.tables;
-        }
+        // }
         //更新圖表
         // this.pie.drawPie(this.totalAmount / this.totalTarge, 0, 0, 0, this.totalAmount.toString());
         this.bar.init(this.completionRate, this.jobNumber, this.totalAmount);
       }
     )
+  }
+
+  //get all time section
+  getSection(tmpFridge: Fridge) {
+    let currentTime = moment().format('YYYY-MM-DD');
+    let currenTarge = 0;
+    return new Promise((resolve, reject) => {
+      try {
+        // let obj :Fridge[]= [];
+        this.appService.getFridges(currentTime, tmpFridge.reader_mac, tmpFridge.job_number).subscribe(
+          fridges => {
+            this.output = (fridges);
+            resolve(fridges);
+          })
+
+      }
+      catch (error) {
+        reject(error);
+      }
+    });
   }
 
 
