@@ -68,13 +68,15 @@ router.get('/getFridges', async function (req, res, next) {
       new moment(currentTime + ' 12:40:00').format('YYYY-MM-DD HH:mm:ss'),
       new moment(currentTime + ' 15:00:00').format('YYYY-MM-DD HH:mm:ss'),
       new moment(currentTime + ' 15:10:00').format('YYYY-MM-DD HH:mm:ss'),
-      new moment(currentTime + ' 16:40:00').format('YYYY-MM-DD HH:mm:ss')];
+      new moment(currentTime + ' 16:40:00').format('YYYY-MM-DD HH:mm:ss'),
+      new moment(currentTime + ' 16:50:00').format('YYYY-MM-DD HH:mm:ss'),
+      new moment(currentTime + ' 23:59:59').format('YYYY-MM-DD HH:mm:ss')];
 
     collection = 'data_' + new moment(currentTime).format('YYYYMMDD') + '_' + req.query.reader_mac;
     // console.log(collection + '->' + searchQuery);
     for (let i = 0; i < sectionTime.length; i += 2) {
       var json = await getSectionTime(collection, req.query.job_number, currentTime, sectionTime[i], sectionTime[i + 1]);
-      if(json) objs.push(json[json.length-1]);
+      if (json) objs.push(json[json.length - 1]);
       // console.log(json[0]);
     }
     console.log(objs);
