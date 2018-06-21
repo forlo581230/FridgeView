@@ -31,6 +31,7 @@ export class DashboardComponent implements OnInit {
   currentFridges: Fridge[] = [];  //current jobNumbers
   output: Fridge[] = [];          //current outputs
   tables: Table[];
+  showcurrentFridges: Fridge[] = [];  //current jobNumbers
   showtables: Table[];
   totalAmount: number;
   totalTarge: number;
@@ -51,19 +52,29 @@ export class DashboardComponent implements OnInit {
 
     this.getJobNumbers(this.reader_mac[id]);
 
+    
     var loop = setInterval(() => {
       switch (this.counter_time) {
-        case 60:
+        case 30:
           this.getJobNumbers(this.reader_mac[id]);
           this.totalAmount = 0;
           this.totalTarge = 0;
           this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
           this.counter_time = 0;
+          this.counter_index = 0;
+
+          
           break;
         case 10:
           if(this.currentFridges.length>3){
+
             this.counter_index += 3;
-            this.currentFridges.splice(0,3);
+            this.showcurrentFridges = this.currentFridges.slice(this.counter_index,this.counter_index+3);
+            this.showtables = this.tables.slice(this.counter_index,this.counter_index+3);
+            this.showjobNumber = this.jobNumber.slice(this.counter_index,this.counter_index+3);
+            this.showcompletionRate = this.completionRate.slice(this.counter_index,this.counter_index+3);
+            this.bar.init(this.showcompletionRate, this.showjobNumber, this.totalAmount);
+
           }
           break;
         default:
@@ -80,6 +91,8 @@ export class DashboardComponent implements OnInit {
 
   completionRate: number[];
   jobNumber: string[];
+  showcompletionRate: number[];
+  showjobNumber: string[];
   getJobNumbers(reader_mac: string) {
 
     //get all jobNumber
@@ -144,8 +157,8 @@ export class DashboardComponent implements OnInit {
             this.jobNumber.push(this.currentFridges[i].job_number.toString());
             // this.jobNumber.push('工號 ('+(i+1).toString()+')');
           }
-
-          for (let i = 2; i < numJob%4%3; i++) {
+          console.log('num:'+numJob);
+          for (let i = 2; i < numJob%4%3+4; i++) {
             this.currentFridges.push(Fridge.CreateDefault());
             this.tables.push(Table.CreateEmpty());
           }
@@ -154,11 +167,16 @@ export class DashboardComponent implements OnInit {
             this.jobNumber = ['?', '?', '?'];
           }
           console.log(this.tables);
-          this.showtables = this.tables;
+          
+          //一次取三份
+          this.showtables = this.tables.slice(this.counter_index,this.counter_index+3);
+          this.showcurrentFridges = this.currentFridges.slice(this.counter_index,this.counter_index+3);
+          this.showjobNumber = this.jobNumber.slice(this.counter_index,this.counter_index+3);
+          this.showcompletionRate = this.completionRate.slice(this.counter_index,this.counter_index+3);
         // }
         //更新圖表
         // this.pie.drawPie(this.totalAmount / this.totalTarge, 0, 0, 0, this.totalAmount.toString());
-        this.bar.init(this.completionRate, this.jobNumber, this.totalAmount);
+        this.bar.init(this.showcompletionRate, this.showjobNumber, this.totalAmount);
       }
     )
   }

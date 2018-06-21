@@ -24,7 +24,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let fridge of currentFridges; let i = index">
+          <tr *ngFor="let fridge of showcurrentFridges; let i = index">
             <td>{{i+1+counter_index}}</td>
             <td>{{fridge.job_number}}</td>
             <td>{{fridge.model}}</td>
@@ -50,7 +50,7 @@
         </thead>
         <tbody *ngFor="let key of showtables; let i=index">
           <tr>
-            <td>{{currentFridges[i].job_number}}</td>
+            <td>{{showcurrentFridges[i].job_number}}</td>
             <td *ngFor="let a of showtables[i].acOutput;">{{a}}</td>
           </tr>
         </tbody>
