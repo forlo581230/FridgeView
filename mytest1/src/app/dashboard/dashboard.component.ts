@@ -52,7 +52,7 @@ export class DashboardComponent implements OnInit {
 
     this.getJobNumbers(this.reader_mac[id]);
 
-    
+
     var loop = setInterval(() => {
       switch (this.counter_time) {
         case 30:
@@ -63,16 +63,16 @@ export class DashboardComponent implements OnInit {
           this.counter_time = 0;
           this.counter_index = 0;
 
-          
+
           break;
         case 10:
-          if(this.currentFridges.length>3){
+          if (this.currentFridges.length > 3) {
 
             this.counter_index += 3;
-            this.showcurrentFridges = this.currentFridges.slice(this.counter_index,this.counter_index+3);
-            this.showtables = this.tables.slice(this.counter_index,this.counter_index+3);
-            this.showjobNumber = this.jobNumber.slice(this.counter_index,this.counter_index+3);
-            this.showcompletionRate = this.completionRate.slice(this.counter_index,this.counter_index+3);
+            this.showcurrentFridges = this.currentFridges.slice(this.counter_index, this.counter_index + 3);
+            this.showtables = this.tables.slice(this.counter_index, this.counter_index + 3);
+            this.showjobNumber = this.jobNumber.slice(this.counter_index, this.counter_index + 3);
+            this.showcompletionRate = this.completionRate.slice(this.counter_index, this.counter_index + 3);
             this.bar.init(this.showcompletionRate, this.showjobNumber, this.totalAmount);
 
           }
@@ -107,72 +107,73 @@ export class DashboardComponent implements OnInit {
         this.currentFridges = elements;
 
         // if (numJob <= 3) {
-          //compute output
-          for (let i = 0; i < numJob; i++) {
-            await this.getSection(this.currentFridges[i]);
-            console.log(this.output);
+        //compute output
+        for (let i = 0; i < numJob; i++) {
+          await this.getSection(this.currentFridges[i]);
+          console.log(this.output);
 
-            let table: Table = Table.CreateDefault();
-            let acOuput = 0;
-            let target = parseInt(this.currentFridges[i].target.toString());
-            let maximumAmount = 0;
-            //this.output.length==4
-            for (let j = 0; j < this.output.length; j++) {
-              if (this.output[j]) {
-                //只使用到 amount
-                let amount = parseInt(this.output[j].amount.toString());
-                acOuput = amount - acOuput;
-                table.acOutput.push(acOuput);
-                // if (amount > maximumAmount) maximumAmount = amount;
-                maximumAmount += acOuput;
-              }
-              else {
-                table.acOutput.push(0);
-              }
-
-              table.note.push('');
+          let table: Table = Table.CreateDefault();
+          let acOuput = 0;
+          let target = parseInt(this.currentFridges[i].target.toString());
+          let maximumAmount = 0;
+          //this.output.length==4
+          for (let j = 0; j < this.output.length; j++) {
+            if (this.output[j]) {
+              //只使用到 amount
+              let amount = parseInt(this.output[j].amount.toString());
+              acOuput = amount - acOuput;
+              table.acOutput.push(acOuput);
+              // if (amount > maximumAmount) maximumAmount = amount;
+              maximumAmount += acOuput;
             }
-            table.target.push((target * 130 / 460).toFixed());
-            table.target.push((target * 100 / 460).toFixed());
-            table.target.push((target * 140 / 460).toFixed());
-            table.target.push((target - parseInt(table.target[0]) - parseInt(table.target[1]) - parseInt(table.target[2])).toFixed());
+            else {
+              table.acOutput.push(0);
+            }
 
-            // acOuput = 0;
-            // target = 0;
-            // for (let index = 0; index < table.target.length; index++) {
-            //   acOuput += table.acOutput[index]
-            //   target += parseInt(table.target[index])
-            //   if (acOuput > target) {
-            //     table.note[index] = '正常'
-            //   }
-            // }
-            // table.acOutput.push(maximumAmount);
-            console.log(table);
-            this.tables.push(table);
-            this.totalAmount += maximumAmount;
+            table.note.push('');
+          }
+          table.target.push((target * 130 / 460).toFixed());
+          table.target.push((target * 100 / 460).toFixed());
+          table.target.push((target * 140 / 460).toFixed());
+          table.target.push((target - parseInt(table.target[0]) - parseInt(table.target[1]) - parseInt(table.target[2])).toFixed());
 
-            this.totalTarge += parseInt(this.currentFridges[i].target.toString());
+          // acOuput = 0;
+          // target = 0;
+          // for (let index = 0; index < table.target.length; index++) {
+          //   acOuput += table.acOutput[index]
+          //   target += parseInt(table.target[index])
+          //   if (acOuput > target) {
+          //     table.note[index] = '正常'
+          //   }
+          // }
+          // table.acOutput.push(maximumAmount);
+          console.log(table);
+          this.tables.push(table);
+          this.totalAmount += maximumAmount;
 
-            this.completionRate.push(parseInt((maximumAmount / parseInt(this.currentFridges[i].target.toString()) * 100).toFixed()));
-            this.jobNumber.push(this.currentFridges[i].job_number.toString());
-            // this.jobNumber.push('工號 ('+(i+1).toString()+')');
-          }
-          console.log('num:'+numJob);
-          for (let i = 2; i < numJob%4%3+4; i++) {
-            this.currentFridges.push(Fridge.CreateDefault());
-            this.tables.push(Table.CreateEmpty());
-          }
-          if (this.completionRate.length == 0) {
-            this.completionRate = [100, 100, 100];
-            this.jobNumber = ['?', '?', '?'];
-          }
-          console.log(this.tables);
-          
-          //一次取三份
-          this.showtables = this.tables.slice(this.counter_index,this.counter_index+3);
-          this.showcurrentFridges = this.currentFridges.slice(this.counter_index,this.counter_index+3);
-          this.showjobNumber = this.jobNumber.slice(this.counter_index,this.counter_index+3);
-          this.showcompletionRate = this.completionRate.slice(this.counter_index,this.counter_index+3);
+          this.totalTarge += parseInt(this.currentFridges[i].target.toString());
+
+          this.completionRate.push(parseInt((maximumAmount / parseInt(this.currentFridges[i].target.toString()) * 100).toFixed()));
+          this.jobNumber.push(this.currentFridges[i].job_number.toString());
+          // this.jobNumber.push('工號 ('+(i+1).toString()+')');
+        }
+        console.log('num:' + numJob);
+        // for (let i = 2; i < numJob%4%3+4; i++) {
+        for (let i = 0; i < (numJob % 3 -3)*-1; i++) {
+          this.currentFridges.push(Fridge.CreateDefault());
+          this.tables.push(Table.CreateEmpty());
+        }
+        if (this.completionRate.length == 0) {
+          this.completionRate = [100, 100, 100];
+          this.jobNumber = ['?', '?', '?'];
+        }
+        console.log(this.tables);
+
+        //一次取三份
+        this.showtables = this.tables.slice(this.counter_index, this.counter_index + 3);
+        this.showcurrentFridges = this.currentFridges.slice(this.counter_index, this.counter_index + 3);
+        this.showjobNumber = this.jobNumber.slice(this.counter_index, this.counter_index + 3);
+        this.showcompletionRate = this.completionRate.slice(this.counter_index, this.counter_index + 3);
         // }
         //更新圖表
         // this.pie.drawPie(this.totalAmount / this.totalTarge, 0, 0, 0, this.totalAmount.toString());
