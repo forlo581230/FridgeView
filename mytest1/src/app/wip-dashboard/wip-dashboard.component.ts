@@ -106,13 +106,14 @@ export class WipDashboardComponent implements OnInit {
           let maximumAmount = 0;
           //this.output.length==4
           for (let j = 0; j < this.output.length; j++) {
-            if (this.output[j]) {
+            if (this.output[j].amount) {
               //只使用到 amount
               let amount = parseInt(this.output[j].amount.toString());
-              acOuput = amount - acOuput;
-              table.acOutput.push(acOuput);
+              let diffOuput = amount - acOuput;
+              table.acOutput.push(diffOuput);
               // if (amount > maximumAmount) maximumAmount = amount;
-              maximumAmount += acOuput;
+              maximumAmount += diffOuput;
+              acOuput = amount;
             }
             else {
               table.acOutput.push(0);

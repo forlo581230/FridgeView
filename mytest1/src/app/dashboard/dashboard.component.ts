@@ -232,10 +232,11 @@ export class DashboardComponent implements OnInit {
             if (this.output[j]) {
               //只使用到 amount
               let amount = parseInt(this.output[j].amount.toString());
-              acOuput = amount - acOuput;
-              table.acOutput.push(acOuput);
+              let diffOuput = amount - acOuput;
+              table.acOutput.push(diffOuput);
               // if (amount > maximumAmount) maximumAmount = amount;
-              maximumAmount += acOuput;
+              maximumAmount += diffOuput;
+              acOuput = amount;
             }
             else {
               table.acOutput.push(0);
