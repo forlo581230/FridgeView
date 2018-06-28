@@ -75,7 +75,6 @@ client.on('message', function (topic, message) {
                         }
                     });
                 } else {
-                    console.log('123');
                     DoUpdate(data);
                 }
                 // console.log(data);
@@ -101,7 +100,6 @@ client.on('message', function (topic, message) {
 
 function DoUpdate(obj) {
     let FridgeList = mongoose.model('list_' + new moment().format('YYYYMMDD') + '_' + obj[0].reader_mac, fridgeSchema);
-
     FridgeList.update({ _id: obj[0].id }, obj[0], function (err) {
         if (!err) {
             console.log('\x1b[32m System: ' + FridgeList.collection.collectionName + ' updated ! \x1b[37m');
