@@ -54,6 +54,7 @@ tbody{
     justify-content:center;
 
     border: 2px solid black;
-    font-size: 60px; 
+    font-size: 66px; 
+    font-weight: bold;
     color: red;
 }
