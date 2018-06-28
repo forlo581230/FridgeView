@@ -57,22 +57,26 @@ client.on('message', function (topic, message) {
                 if (err) {
                     throw '\x1b[31m Error: mongodb ' + err + '\x1b[37m';
                 } else {
-                    console.log('\x1b[32m System: readerMac ->' + newfridge.reader_mac + ' inserted database ! \x1b[37m')
+                    console.log('\x1b[32m System: ' + Fridge.collection.collectionName + ' inserted database ! \x1b[37m')
                 }
             });
 
             let FridgeList = mongoose.model('list_' + new moment().format('YYYYMMDD') + '_' + fridge.reader_mac, fridgeSchema);
 
             FridgeList.find({ job_number: newfridge.job_number }, function (err, data) {
+
+                let newfridgeList = new FridgeList(JSON.parse(message.toString())[0]);
                 if (!data[0]) {
-                    let newfridgeList = new FridgeList(JSON.parse(message.toString())[0]);
                     newfridgeList.save(function (err) {
                         if (err) {
                             throw '\x1b[31m Error: mongodb ' + err + '\x1b[37m';
                         } else {
-                            console.log('\x1b[32m System: job_number: ' + newfridge.job_number + '->' + newfridge.reader_mac + ' inserted database ! \x1b[37m')
+                            console.log('\x1b[32m System: ' + FridgeList.collection.collectionName + ' inserted ! \x1b[37m');
                         }
                     });
+                } else {
+                    console.log('123');
+                    DoUpdate(data);
                 }
                 // console.log(data);
             });
@@ -93,8 +97,15 @@ client.on('message', function (topic, message) {
         console.log(err);
     }
 
-
-
-
 })
+
+function DoUpdate(obj) {
+    let FridgeList = mongoose.model('list_' + new moment().format('YYYYMMDD') + '_' + obj[0].reader_mac, fridgeSchema);
+
+    FridgeList.update({ _id: obj[0].id }, obj[0], function (err) {
+        if (!err) {
+            console.log('\x1b[32m System: ' + FridgeList.collection.collectionName + ' updated ! \x1b[37m');
+        }
+    });
+}
 
