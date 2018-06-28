@@ -47,7 +47,7 @@
           <th scope="col" style="vertical-align:middle;">加班</th>
         </tr>
       </thead>
-      <tbody *ngFor="let key of showtables; let i=index" style="color:#0000c6">
+      <tbody *ngFor="let key of showtables; let i=index">
         <tr>
           <td>{{showcurrentFridges[i].job_number}}</td>
           <td *ngFor="let a of showtables[i].acOutput;">{{a}}</td>
