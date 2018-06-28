@@ -1,6 +1,7 @@
 import { Component, ViewChild, AfterViewInit, ElementRef, OnInit } from '@angular/core';
 // import { PieComponent } from '../pie/pie.component';
 import { BarComponent } from '../bar/bar.component';
+import { WipDashboardComponent } from '../wip-dashboard/wip-dashboard.component';
 import * as moment from 'moment';
 
 import { AppService } from '../services/app.service';
@@ -17,16 +18,19 @@ import { Table } from '../model/table';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  rfid: string[] = ['箱體發泡', '商檢異常出口', '裝配線入口', '裝配線出口'];
-  reader_mac: string[] = ['rfid_1', 'rfid_2', 'rfid_3', 'rfid_4'];
+  rfid: string[] = ['', '箱體發泡', '商檢異常出口', '裝配線入口', '裝配線出口'];
+  reader_mac: string[] = ['', 'rfid_1', 'rfid_2', 'rfid_3', 'rfid_4'];
   title: string;
   date: string;
   counter_time: number;
   counter_index: number;
+  wip: boolean = false;
   // obj: object;
 
   // @ViewChild(PieComponent) pie: PieComponent;
   @ViewChild(BarComponent) bar: BarComponent;
+  @ViewChild(WipDashboardComponent) WipDashboard: WipDashboardComponent;
+  id: number;
 
   currentFridges: Fridge[] = [];  //current jobNumbers
   output: Fridge[] = [];          //current outputs
@@ -38,7 +42,134 @@ export class DashboardComponent implements OnInit {
   constructor(
     private appService: AppService,
     private route: ActivatedRoute
-  ) {
+  ) { }
+
+  second: number = 1;
+  position_1() {
+    var loop = setInterval(() => {
+      switch (this.counter_time) {
+        case 15:
+          if (this.currentFridges.length > 3) {
+            this.counter_index += 3;
+            this.showcurrentFridges = this.currentFridges.slice(this.counter_index, this.counter_index + 3);
+            this.showtables = this.tables.slice(this.counter_index, this.counter_index + 3);
+            this.showjobNumber = this.jobNumber.slice(this.counter_index, this.counter_index + 3);
+            this.showcompletionRate = this.completionRate.slice(this.counter_index, this.counter_index + 3);
+            this.bar.init(this.showcompletionRate, this.showjobNumber, this.totalAmount);
+          }
+          break;
+        case 30:
+          this.id = 6;
+          this.wip = true;
+          break;
+        case 40:
+          this.title = this.rfid[3];
+          this.getJobNumbers(this.reader_mac[3]);
+          this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
+          this.counter_index = 0;
+          this.wip = false;
+          break;
+        case 50:
+          this.title = this.rfid[4];
+          this.getJobNumbers(this.reader_mac[4]);
+          this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
+          this.counter_index = 0;
+          this.wip = false;
+          break;
+        case 60:
+          this.title = this.rfid[1];
+          this.getJobNumbers(this.reader_mac[1]);
+          this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
+          this.counter_time = 0;
+          this.counter_index = 0;
+          this.wip = false;
+          break;
+        default:
+          break;
+      }
+
+      this.counter_time++;
+    }, 1000 * this.second);
+  }
+  position_2() {
+    var loop = setInterval(() => {
+      switch (this.counter_time) {
+        case 15:
+          if (this.currentFridges.length > 3) {
+            this.counter_index += 3;
+            this.showcurrentFridges = this.currentFridges.slice(this.counter_index, this.counter_index + 3);
+            this.showtables = this.tables.slice(this.counter_index, this.counter_index + 3);
+            this.showjobNumber = this.jobNumber.slice(this.counter_index, this.counter_index + 3);
+            this.showcompletionRate = this.completionRate.slice(this.counter_index, this.counter_index + 3);
+            this.bar.init(this.showcompletionRate, this.showjobNumber, this.totalAmount);
+          }
+          break;
+        case 30:
+          this.title = this.rfid[1];
+          this.getJobNumbers(this.reader_mac[1]);
+          this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
+          this.counter_index = 0;
+          break;
+        case 40:
+          this.id = 6;
+          this.wip = true;
+          break;
+        case 50:
+          this.id = 8;
+          this.wip = true;
+          break;
+        case 60:
+          this.title = this.rfid[3];
+          this.getJobNumbers(this.reader_mac[3]);
+          this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
+          this.counter_time = 0;
+          this.counter_index = 0;
+          this.wip = false;
+          break;
+        default:
+          break;
+      }
+
+      this.counter_time++;
+    }, 1000 * this.second);
+  }
+  position_3() {
+    var loop = setInterval(() => {
+      switch (this.counter_time) {
+        case 15:
+          if (this.currentFridges.length > 3) {
+            this.counter_index += 3;
+            this.showcurrentFridges = this.currentFridges.slice(this.counter_index, this.counter_index + 3);
+            this.showtables = this.tables.slice(this.counter_index, this.counter_index + 3);
+            this.showjobNumber = this.jobNumber.slice(this.counter_index, this.counter_index + 3);
+            this.showcompletionRate = this.completionRate.slice(this.counter_index, this.counter_index + 3);
+            this.bar.init(this.showcompletionRate, this.showjobNumber, this.totalAmount);
+          }
+          break;
+        case 30:
+          this.id = 6;
+          this.wip = true;
+          break;
+        case 40:
+          this.id = 7;
+          this.wip = true;
+          break;
+        case 50:
+          this.id = 8;
+          this.wip = true;
+          break;
+        case 60:
+          this.getJobNumbers(this.reader_mac[4]);
+          this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
+          this.counter_time = 0;
+          this.counter_index = 0;
+          this.wip = false;
+          break;
+        default:
+          break;
+      }
+      this.counter_time++;
+    }, 1000 * this.second);
   }
 
   ngOnInit() {
@@ -47,42 +178,21 @@ export class DashboardComponent implements OnInit {
     this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
     this.counter_time = 0;
     this.counter_index = 0;
-    this.totalAmount = 0;
-    this.totalTarge = 0;
 
     this.getJobNumbers(this.reader_mac[id]);
 
+    switch (id) {
+      case 1:
+        this.position_1();
+        break;
+      case 3:
+        this.position_2();
+        break;
+      case 4:
+        this.position_3();
+        break;
+    }
 
-    var loop = setInterval(() => {
-      switch (this.counter_time) {
-        case 30:
-          this.getJobNumbers(this.reader_mac[id]);
-          this.totalAmount = 0;
-          this.totalTarge = 0;
-          this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
-          this.counter_time = 0;
-          this.counter_index = 0;
-
-
-          break;
-        case 10:
-          if (this.currentFridges.length > 3) {
-
-            this.counter_index += 3;
-            this.showcurrentFridges = this.currentFridges.slice(this.counter_index, this.counter_index + 3);
-            this.showtables = this.tables.slice(this.counter_index, this.counter_index + 3);
-            this.showjobNumber = this.jobNumber.slice(this.counter_index, this.counter_index + 3);
-            this.showcompletionRate = this.completionRate.slice(this.counter_index, this.counter_index + 3);
-            this.bar.init(this.showcompletionRate, this.showjobNumber, this.totalAmount);
-
-          }
-          break;
-        default:
-          break;
-      }
-
-      this.counter_time++;
-    }, 1000 * 1);
     // Bar chart
   }
   // ngAfterViewInit() {
@@ -94,7 +204,8 @@ export class DashboardComponent implements OnInit {
   showcompletionRate: number[];
   showjobNumber: string[];
   getJobNumbers(reader_mac: string) {
-
+    this.totalAmount = 0;
+    this.totalTarge = 0;
     //get all jobNumber
     this.appService.getJobNumbers(moment().format('YYYY-MM-DD'), reader_mac).subscribe(
       async elements => {
@@ -159,7 +270,7 @@ export class DashboardComponent implements OnInit {
         }
         console.log('num:' + numJob);
         // for (let i = 2; i < numJob%4%3+4; i++) {
-        for (let i = 0; i < (numJob % 3 -3)*-1; i++) {
+        for (let i = 0; i < (numJob % 3 - 3) * -1; i++) {
           this.currentFridges.push(Fridge.CreateDefault());
           this.tables.push(Table.CreateEmpty());
         }
