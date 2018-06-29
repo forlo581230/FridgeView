@@ -213,6 +213,7 @@ export class DashboardComponent implements OnInit {
         this.completionRate = [];
         this.jobNumber = [];
 
+        console.log('目前工號數量:');
         console.log(elements);
         let numJob = elements.length;
         this.currentFridges = elements;
@@ -221,6 +222,7 @@ export class DashboardComponent implements OnInit {
         //compute output
         for (let i = 0; i < numJob; i++) {
           await this.getSection(this.currentFridges[i]);
+          console.log(this.currentFridges[i].job_number+'_五個時段 : ');
           console.log(this.output);
 
           let table: Table = Table.CreateDefault();
@@ -259,6 +261,7 @@ export class DashboardComponent implements OnInit {
           //   }
           // }
           // table.acOutput.push(maximumAmount);
+          console.log('table');
           console.log(table);
           this.tables.push(table);
           this.totalAmount += maximumAmount;
