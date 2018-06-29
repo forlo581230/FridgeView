@@ -64,9 +64,9 @@ client.on('message', function (topic, message) {
             let FridgeList = mongoose.model('list_' + new moment().format('YYYYMMDD') + '_' + fridge.reader_mac, fridgeSchema);
 
             FridgeList.find({ job_number: newfridge.job_number }, function (err, data) {
-
-                let newfridgeList = new FridgeList(JSON.parse(message.toString())[0]);
+                
                 if (!data[0]) {
+                    let newfridgeList = new FridgeList(JSON.parse(message.toString())[0]);
                     newfridgeList.save(function (err) {
                         if (err) {
                             throw '\x1b[31m Error: mongodb ' + err + '\x1b[37m';
@@ -75,7 +75,7 @@ client.on('message', function (topic, message) {
                         }
                     });
                 } else {
-                    DoUpdate(data, newfridgeList);
+                    DoUpdate(data, JSON.parse(message.toString())[0]);
                 }
                 // console.log(data);
             });
@@ -100,8 +100,8 @@ client.on('message', function (topic, message) {
 
 function DoUpdate(old_data, new_data) {
     let FridgeList = mongoose.model('list_' + new moment().format('YYYYMMDD') + '_' + old_data[0].reader_mac, fridgeSchema);
-    // console.log(old_data[0].id);
-    FridgeList.update({ _id: old_data[0].id }, new_data[0], function (err) {
+    console.log(old_data[0].id);
+    FridgeList.update({ _id: old_data[0].id }, new_data, function (err) {
         if (!err) {
             console.log('\x1b[32m System: ' + FridgeList.collection.collectionName + ' updated ! \x1b[37m');
         }
