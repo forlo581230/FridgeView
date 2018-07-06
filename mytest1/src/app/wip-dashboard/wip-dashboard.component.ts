@@ -1,4 +1,4 @@
-import { Component, OnInit ,Input } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { BarComponent } from '../bar/bar.component';
 import * as moment from 'moment';
 
@@ -33,7 +33,8 @@ export class WipDashboardComponent implements OnInit {
   showtables: Table[];
   totalAmount: number;
   totalTarge: number;
-  @Input()id: number;
+  @Input() id: number;
+
 
   ngOnInit() {
     if (!this.id)
@@ -44,34 +45,33 @@ export class WipDashboardComponent implements OnInit {
     this.counter_index = 0;
     this.totalAmount = 0;
     this.totalTarge = 0;
-
     this.getJobNumbers(this.reader_mac[this.id]);
 
-    var loop = setInterval(() => {
-      switch (this.counter_time) {
-        case 30:
-          this.getJobNumbers(this.reader_mac[this.id]);
-          this.totalAmount = 0;
-          this.totalTarge = 0;
-          this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
-          this.counter_time = 0;
-          this.counter_index = 0;
-          break;
-        case 10:
-          if (this.currentFridges.length > 6) {
-            this.counter_index += 6;
-            this.showcurrentFridges = this.currentFridges.slice(this.counter_index, this.counter_index + 6);
-            this.showtables = this.tables.slice(this.counter_index, this.counter_index + 6);
-            this.showjobNumber = this.jobNumber.slice(this.counter_index, this.counter_index + 6);
-            this.showcompletionRate = this.completionRate.slice(this.counter_index, this.counter_index + 6);
-          }
-          break;
-        default:
-          break;
-      }
+    // var loop = setInterval(() => {
+    //   switch (this.counter_time) {
+    //     case 30:
+    //       this.getJobNumbers(this.reader_mac[this.id]);
+    //       this.totalAmount = 0;
+    //       this.totalTarge = 0;
+    //       this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
+    //       this.counter_time = 0;
+    //       this.counter_index = 0;
+    //       break;
+    //     case 10:
+    //       if (this.currentFridges.length > 6) {
+    //         this.counter_index += 6;
+    //         this.showcurrentFridges = this.currentFridges.slice(this.counter_index, this.counter_index + 6);
+    //         this.showtables = this.tables.slice(this.counter_index, this.counter_index + 6);
+    //         this.showjobNumber = this.jobNumber.slice(this.counter_index, this.counter_index + 6);
+    //         this.showcompletionRate = this.completionRate.slice(this.counter_index, this.counter_index + 6);
+    //       }
+    //       break;
+    //     default:
+    //       break;
+    //   }
 
-      this.counter_time++;
-    }, 1000 * 1);
+    //   this.counter_time++;
+    // }, 1000 * 1);
   }
 
   completionRate: number[];
@@ -106,7 +106,7 @@ export class WipDashboardComponent implements OnInit {
           let maximumAmount = 0;
           //this.output.length==4
           for (let j = 0; j < this.output.length; j++) {
-            if (this.output[j].amount) {
+            if (this.output[j]) {
               //只使用到 amount
               let amount = parseInt(this.output[j].amount.toString());
               let diffOuput = amount - acOuput;
@@ -154,6 +154,7 @@ export class WipDashboardComponent implements OnInit {
         this.showjobNumber = this.jobNumber.slice(this.counter_index, this.counter_index + 6);
         this.showcompletionRate = this.completionRate.slice(this.counter_index, this.counter_index + 6);
         // }
+        console.log(this.id);
       }
     )
   }

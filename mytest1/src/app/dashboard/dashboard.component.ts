@@ -63,26 +63,26 @@ export class DashboardComponent implements OnInit {
           this.wip = true;
           break;
         case 40:
+          this.wip = false;
           this.title = this.rfid[3];
           this.getJobNumbers(this.reader_mac[3]);
           this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
           this.counter_index = 0;
-          this.wip = false;
           break;
         case 50:
+          this.wip = false;
           this.title = this.rfid[4];
           this.getJobNumbers(this.reader_mac[4]);
           this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
           this.counter_index = 0;
-          this.wip = false;
           break;
         case 60:
+          this.wip = false;
           this.title = this.rfid[1];
           this.getJobNumbers(this.reader_mac[1]);
           this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
           this.counter_time = 0;
           this.counter_index = 0;
-          this.wip = false;
           break;
         default:
           break;
@@ -115,16 +115,16 @@ export class DashboardComponent implements OnInit {
           this.wip = true;
           break;
         case 50:
-          this.id = 8;
-          this.wip = true;
+          this.WipDashboard.id = 8;
+          this.WipDashboard.ngOnInit();
           break;
         case 60:
+          this.wip = false;
           this.title = this.rfid[3];
           this.getJobNumbers(this.reader_mac[3]);
           this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
           this.counter_time = 0;
           this.counter_index = 0;
-          this.wip = false;
           break;
         default:
           break;
@@ -151,19 +151,19 @@ export class DashboardComponent implements OnInit {
           this.wip = true;
           break;
         case 40:
-          this.id = 7;
-          this.wip = true;
+          this.WipDashboard.id = 7;
+          this.WipDashboard.ngOnInit();
           break;
         case 50:
-          this.id = 8;
-          this.wip = true;
+          this.WipDashboard.id = 8;
+          this.WipDashboard.ngOnInit();
           break;
         case 60:
+          this.wip = false;
           this.getJobNumbers(this.reader_mac[4]);
           this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
           this.counter_time = 0;
           this.counter_index = 0;
-          this.wip = false;
           break;
         default:
           break;
@@ -213,6 +213,7 @@ export class DashboardComponent implements OnInit {
         this.completionRate = [];
         this.jobNumber = [];
 
+        console.log('目前工號數量:');
         console.log(elements);
         let numJob = elements.length;
         this.currentFridges = elements;
@@ -221,6 +222,7 @@ export class DashboardComponent implements OnInit {
         //compute output
         for (let i = 0; i < numJob; i++) {
           await this.getSection(this.currentFridges[i]);
+          console.log(this.currentFridges[i].job_number + '_五個時段 : ');
           console.log(this.output);
 
           let table: Table = Table.CreateDefault();
@@ -259,6 +261,7 @@ export class DashboardComponent implements OnInit {
           //   }
           // }
           // table.acOutput.push(maximumAmount);
+          console.log('table');
           console.log(table);
           this.tables.push(table);
           this.totalAmount += maximumAmount;
