@@ -101,7 +101,7 @@ client.on('message', function (topic, message) {
 function DoUpdate(old_data, new_data) {
     let FridgeList = mongoose.model('list_' + new moment().format('YYYYMMDD') + '_' + old_data[0].reader_mac, fridgeSchema);
     console.log(old_data[0].id);
-    if (new_data.amount == '0') {
+    if (new_data.amount === '0') {
         FridgeList.remove({ _id: old_data[0].id }, function (err) {
             if (!err) {
                 console.log(old_data[0].job_number +`'s amount is zero.`);
