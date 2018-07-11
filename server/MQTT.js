@@ -64,7 +64,7 @@ client.on('message', function (topic, message) {
             let FridgeList = mongoose.model('list_' + new moment().format('YYYYMMDD') + '_' + fridge.reader_mac, fridgeSchema);
 
             FridgeList.find({ job_number: newfridge.job_number }, function (err, data) {
-                
+
                 if (!data[0]) {
                     let newfridgeList = new FridgeList(JSON.parse(message.toString())[0]);
                     newfridgeList.save(function (err) {
@@ -101,10 +101,20 @@ client.on('message', function (topic, message) {
 function DoUpdate(old_data, new_data) {
     let FridgeList = mongoose.model('list_' + new moment().format('YYYYMMDD') + '_' + old_data[0].reader_mac, fridgeSchema);
     console.log(old_data[0].id);
-    FridgeList.update({ _id: old_data[0].id }, new_data, function (err) {
-        if (!err) {
-            console.log('\x1b[32m System: ' + FridgeList.collection.collectionName + ' updated ! \x1b[37m');
-        }
-    });
+    if (new_data.amount === '0') {
+        FridgeList.remove({ _id: old_data[0].id }, function (err) {
+            if (!err) {
+                console.log(old_data[0].job_number +`'s amount is zero.`);
+                console.log('\x1b[32m System: ' + FridgeList.collection.collectionName + 'removed ! \x1b[37m');
+            }
+        });
+    }else{
+        FridgeList.update({ _id: old_data[0].id }, new_data, function (err) {
+            if (!err) {
+                console.log('\x1b[32m System: ' + FridgeList.collection.collectionName + ' updated ! \x1b[37m');
+            }
+        });
+    }
+
 }
 
