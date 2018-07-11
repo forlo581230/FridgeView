@@ -77,10 +77,6 @@ export class DashboardComponent implements OnInit {
           this.counter_index = 0;
           break;
         case 60:
-          this.wip = 2;
-          this.counter_index = 0;
-          break;
-        case 60 + 87:
           this.wip = -1;
           this.title = this.rfid[1];
           this.getJobNumbers(this.reader_mac[1]);

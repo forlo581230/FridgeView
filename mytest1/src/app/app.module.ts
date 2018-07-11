@@ -13,6 +13,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { MapComponent } from './map/map.component';
 import { BarComponent } from './bar/bar.component';
 import { WipDashboardComponent } from './wip-dashboard/wip-dashboard.component';
+import { BufferComponent } from './buffer/buffer.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { WipDashboardComponent } from './wip-dashboard/wip-dashboard.component';
     DashboardComponent,
     MapComponent,
     BarComponent,
-    WipDashboardComponent
+    WipDashboardComponent,
+    BufferComponent
   ],
   imports: [
     BrowserModule,
