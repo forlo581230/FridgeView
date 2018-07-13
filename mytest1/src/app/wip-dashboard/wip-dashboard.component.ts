@@ -134,27 +134,29 @@ export class WipDashboardComponent implements OnInit {
 
           this.completionRate.push(parseInt((maximumAmount / parseInt(this.currentFridges[i].target.toString()) * 100).toFixed()));
           this.jobNumber.push(this.currentFridges[i].job_number.toString());
-          // this.jobNumber.push('工號 ('+(i+1).toString()+')');
         }
         // for (let i = 2; i < numJob%4%3+4; i++) {
         for (let i = 0; i < (numJob % 6 - 6) * -1; i++) {
           this.currentFridges.push(Fridge.CreateDefault());
           this.tables.push(Table.CreateEmpty());
         }
-        if (this.completionRate.length == 0) {
-          this.completionRate = [100, 100, 100];
-          this.jobNumber = ['?', '?', '?'];
-        }
         console.log('table');
         console.log(this.tables);
 
+        // if (this.completionRate.length == 0) {
+        //   this.completionRate = [100, 100, 100];
+        //   this.jobNumber = ['?', '?', '?'];
+        // }
+
+
         //一次取6份
-        this.showtables = this.tables.slice(this.counter_index, this.counter_index + 6);
+        // this.showtables = this.tables.slice(this.counter_index, this.counter_index + 6);
         this.showcurrentFridges = this.currentFridges.slice(this.counter_index, this.counter_index + 6);
-        this.showjobNumber = this.jobNumber.slice(this.counter_index, this.counter_index + 6);
-        this.showcompletionRate = this.completionRate.slice(this.counter_index, this.counter_index + 6);
+        // this.showjobNumber = this.jobNumber.slice(this.counter_index, this.counter_index + 6);
+        // this.showcompletionRate = this.completionRate.slice(this.counter_index, this.counter_index + 6);
         // }
         console.log(this.id);
+        console.log(this.currentFridges);
       }
     )
   }

@@ -20,10 +20,10 @@ export class BufferComponent implements OnInit {
   position_1() {
     var loop = setInterval(() => {
       switch (this.counter_time) {
-        case 60:
+        case 10:
           this.wip = 1;
           break;
-        case 60 + 87:
+        case 10 + 87:
           this.wip = -1;
           this.counter_time=0;
           break;
