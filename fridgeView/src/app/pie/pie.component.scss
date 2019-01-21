@@ -1,0 +1,25 @@
+.box{
+    position:relative;
+    width: 600px;
+    height:200px;
+    // background: rgb(0, 162, 255);
+    // border: 2px solid black;
+  }
+  
+  .mainPie{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    // background: rgba(128, 128, 128, 0.726);
+  }
+  
+  .subPie{
+    position:absolute;
+    display:flex;
+    // align-items:center;
+    // justify-content:center;
+    bottom:0px;
+    width: 400px;
+    height:200px;
+    // background: yellow;
+  }

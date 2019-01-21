@@ -5,6 +5,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { MapComponent } from './map/map.component';
 import { WipDashboardComponent } from './wip-dashboard/wip-dashboard.component';
 import { BufferComponent } from './buffer/buffer.component';
+
 const routes: Routes = [
     { path: '',   redirectTo: '/map', pathMatch: 'full' },
     { path: 'dashboard/:id', component: DashboardComponent },
@@ -12,9 +13,6 @@ const routes: Routes = [
     { path: 'buffer', component: BufferComponent },
     { path: 'map',        component: MapComponent },
 ];
-  // { path: 'carSetting', component: AppCarSetting},
-  // { path: 'trafficInfo', component: AppTrafficInfo},
-  // { path: 'speed', component: SpeedComponent}
 
 @NgModule({
   imports: [ RouterModule.forRoot(routes) ],

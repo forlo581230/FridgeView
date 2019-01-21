@@ -10,7 +10,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Fridge } from '../model/fridge';
 import { Table } from '../model/table';
 
-
+export const RFID: string[] = ['', '箱體發泡', '商檢異常出口', '裝配線入口', '裝配線出口'];
+export const READER_MAC: string[] = ['', 'rfid_1', 'rfid_2', 'rfid_3', 'rfid_4'];
 
 @Component({
   selector: 'app-dashboard',
@@ -18,8 +19,7 @@ import { Table } from '../model/table';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  rfid: string[] = ['', '箱體發泡', '商檢異常出口', '裝配線入口', '裝配線出口'];
-  reader_mac: string[] = ['', 'rfid_1', 'rfid_2', 'rfid_3', 'rfid_4'];
+
   title: string;
   date: string;
   counter_time: number;
@@ -44,7 +44,7 @@ export class DashboardComponent implements OnInit {
     private route: ActivatedRoute
   ) { }
 
-  second: number = 1;
+  second: number = 1; //for interval
   position_1() {
     var loop = setInterval(() => {
       switch (this.counter_time) {
@@ -64,30 +64,27 @@ export class DashboardComponent implements OnInit {
           break;
         case 40:
           this.wip = -1;
-          this.title = this.rfid[3];
-          this.getJobNumbers(this.reader_mac[3]);
-          this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
+          this.title = RFID[3];
+          this.getJobNumbers(READER_MAC[3]);
           this.counter_index = 0;
           break;
         case 50:
           this.wip = -1;
-          this.title = this.rfid[4];
-          this.getJobNumbers(this.reader_mac[4]);
-          this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
+          this.title = RFID[4];
+          this.getJobNumbers(READER_MAC[4]);
           this.counter_index = 0;
           break;
         case 60:
           this.wip = -1;
-          this.title = this.rfid[1];
-          this.getJobNumbers(this.reader_mac[1]);
-          this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
+          this.title = RFID[1];
+          this.getJobNumbers(READER_MAC[1]);
           this.counter_time = 0;
           this.counter_index = 0;
           break;
         default:
           break;
       }
-
+      this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
       this.counter_time++;
     }, 1000 * this.second);
   }
@@ -105,8 +102,8 @@ export class DashboardComponent implements OnInit {
           }
           break;
         case 30:
-          this.title = this.rfid[1];
-          this.getJobNumbers(this.reader_mac[1]);
+          this.title = RFID[1];
+          this.getJobNumbers(READER_MAC[1]);
           this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
           this.counter_index = 0;
           break;
@@ -120,8 +117,8 @@ export class DashboardComponent implements OnInit {
           break;
         case 60:
           this.wip = -1;
-          this.title = this.rfid[3];
-          this.getJobNumbers(this.reader_mac[3]);
+          this.title = RFID[3];
+          this.getJobNumbers(READER_MAC[3]);
           this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
           this.counter_time = 0;
           this.counter_index = 0;
@@ -160,7 +157,7 @@ export class DashboardComponent implements OnInit {
           break;
         case 60:
           this.wip = -1;
-          this.getJobNumbers(this.reader_mac[4]);
+          this.getJobNumbers(READER_MAC[4]);
           this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
           this.counter_time = 0;
           this.counter_index = 0;
@@ -174,12 +171,12 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.title = this.rfid[id];
+    this.title = RFID[id];
     this.date = moment().format('日期: YYYY-MM-DD 時間: HH時mm分');
     this.counter_time = 0;
     this.counter_index = 0;
 
-    this.getJobNumbers(this.reader_mac[id]);
+    this.getJobNumbers(READER_MAC[id]);
 
     switch (id) {
       case 1:
