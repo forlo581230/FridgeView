@@ -62,6 +62,7 @@ export class DashboardComponent implements OnInit {
 
       if (this.counter_time == 31) {
         this.counter_time = 0;
+        this.counter_index = 0;
       }
       // switch (this.counter_time) {
       //   case 15:
@@ -122,6 +123,7 @@ export class DashboardComponent implements OnInit {
 
       if (this.counter_time == 31) {
         this.counter_time = 0;
+        this.counter_index = 0;
       }
       // switch (this.counter_time) {
       //   case 15:
@@ -181,6 +183,7 @@ export class DashboardComponent implements OnInit {
 
       if (this.counter_time == 31) {
         this.counter_time = 0;
+        this.counter_index = 0;
       }
       // switch (this.counter_time) {
       //   case 15:
