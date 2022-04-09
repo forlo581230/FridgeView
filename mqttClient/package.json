@@ -6,7 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "moment": "^2.22.1",
+    "moment": "^2.29.2",
     "mongoose": "^4.13.14",
     "mosca": "^2.8.1",
     "mqtt": "^2.18.0"
